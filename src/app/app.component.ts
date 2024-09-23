@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { from, fromEvent, Observable, of } from 'rxjs';
+import { CustomObserver } from './custom-observer';
 
 @Component({
   selector: 'app-root',
@@ -98,5 +99,10 @@ export class AppComponent {
                 console.log('completed')
             }
         })
+
+        // subscribe to custom observer
+        // completed object is console logged due to the use of 'from' operator,
+        // which knows the last value of the stream when using an array.
+        numbers$.subscribe(new CustomObserver());
     }
 }
