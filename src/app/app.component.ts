@@ -27,6 +27,12 @@ export class AppComponent {
             }, 1000)
         })
 
+        const rejectMessagePromise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject('Server error!');
+            }, 1000)
+        })
+
         const users$ = of(users);
         /** important to use from when dealing with promises
          *  as 'from' returns the value once the promise has resolved
@@ -34,6 +40,7 @@ export class AppComponent {
          * */
         const message$ = from(messagePromise);
         const bodyClicks$ = fromEvent(document, 'click');
+        const rejectMessage$ = from(rejectMessagePromise);
 
         numbers$.subscribe((data) => {
             console.log('subscriber', data);
@@ -50,6 +57,18 @@ export class AppComponent {
 
         bodyClicks$.subscribe((event) => {
             console.log('event', event)
+        })
+
+        rejectMessage$.subscribe({
+            next: (rejectMessage) => {
+                console.log('resolved with message', rejectMessage)
+            },
+            error: (err) => {
+                console.log('rejected with error', err)
+            },
+            complete: () => {
+                console.log('complete, it is done.')
+            }
         })
     }
 }
