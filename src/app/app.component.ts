@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { from, fromEvent, of } from 'rxjs';
+import { from, fromEvent, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -42,6 +42,25 @@ export class AppComponent {
         const bodyClicks$ = fromEvent(document, 'click');
         const rejectMessage$ = from(rejectMessagePromise);
 
+        const usersCustomObservable$ = new Observable(observer => {
+            //comment out this code when running the operator simulations below
+            observer.next(1);
+            observer.next(2);
+            observer.next(3);
+            observer.complete();    // closes/kills the stream, prevents data mutation
+            // observer.next(5)  // this code will not fire since the data stream is closed
+
+            // simulate of operator
+            // uncomment the code below
+            // observer.next(users);
+
+            // simulate from operator
+            // uncomment the code below
+            // users.forEach((user) => {
+            //     observer.next(user);
+            // })
+        })
+
         numbers$.subscribe((data) => {
             console.log('subscriber', data);
             this.data = data;
@@ -68,6 +87,15 @@ export class AppComponent {
             },
             complete: () => {
                 console.log('complete, it is done.')
+            }
+        })
+
+        usersCustomObservable$.subscribe({
+            next: (customObservable) => {
+                console.log('customObservable', customObservable)
+            },
+            complete: () => {
+                console.log('completed')
             }
         })
     }
